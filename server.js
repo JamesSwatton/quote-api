@@ -29,6 +29,17 @@ app.get('/api/quotes', (req, res, next) => {
     }
 })
 
+app.get('/api/quotes/:id', (req, res, next) => {
+    const quoteById = quotes.find(quote => {
+        return quote.id === +req.params.id;
+        })
+    if (quoteById) {
+        res.send({quote: quoteById});
+    } else {
+        res.status(404).send();
+    }
+})
+
 app.post('/api/quotes', (req, res, next) => {
     console.log(req.query);
     const newQuote = {
@@ -44,6 +55,27 @@ app.post('/api/quotes', (req, res, next) => {
         res.status(400).send();
     }
 })
+
+app.put('/api/quotes/:id', (req, res, next) => {
+    const quoteElement = quotes.find(quote => {
+        return quote.id === +req.params.id;
+    });
+    const quoteIndex = quotes.indexOf(quoteElement);
+    if (quoteIndex !== '') {
+        if (req.query.person) {
+            quoteElement.person = req.query.person;
+        }
+        if (req.query.quote) {
+            quoteElement.quote = req.query.quote;
+        }
+        quotes[quoteIndex] = quoteElement;
+        res.status(200).send(quotes[quoteIndex]);
+    } else {
+        res.status(404).send();
+    }
+
+
+}) 
 
 app.listen(PORT, () => {
     console.log(`listening on port: ${PORT}`);
