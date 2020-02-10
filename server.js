@@ -61,7 +61,7 @@ app.put('/api/quotes/:id', (req, res, next) => {
         return quote.id === +req.params.id;
     });
     const quoteIndex = quotes.indexOf(quoteElement);
-    if (quoteIndex !== '') {
+    if (quoteIndex !== -1) {
         if (req.query.person) {
             quoteElement.person = req.query.person;
         }
@@ -73,9 +73,20 @@ app.put('/api/quotes/:id', (req, res, next) => {
     } else {
         res.status(404).send();
     }
-
-
 }) 
+
+app.delete('/api/quotes/:id', (req, res, next) => {
+    const quoteElement = quotes.find(quote => {
+        return quote.id === +req.params.id;
+    });
+    const quoteIndex = quotes.indexOf(quoteElement);
+    if (quoteIndex !== -1) {
+        quotes[quoteIndex] = '';
+        res.status(204).send();
+    } else {
+        res.status(400).send();
+    }
+})
 
 app.listen(PORT, () => {
     console.log(`listening on port: ${PORT}`);
