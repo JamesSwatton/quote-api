@@ -15,6 +15,20 @@ app.get('/api/quotes/random', (req, res, next) => {
     res.status(200).send(randomQuote);
 })
 
+app.get('/api/quotes', (req, res, next) => {
+    const personToFind = req.query.person;
+    const quotesByPerson = quotes.filter(quote => {
+        return quote.person === personToFind;
+    })
+    if (personToFind) {
+        res.status(200).send({quotes: quotesByPerson});
+    } else if (req.query.person === '') {
+        res.status(200).send({quotes: []});
+    } else {
+        res.send({quotes});
+    }
+})
+
 app.listen(PORT, () => {
     console.log(`listening on port: ${PORT}`);
 });
